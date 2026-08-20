@@ -29,7 +29,7 @@ export const taskSlice = createSlice({
       const task = action.payload;
 
       //will return match index
-      const index = state.tasks.findIndex(
+      const index = state.tasks.findIndex(iu
         (elem) => String(elem._id) === String(task._id),
       );
 
