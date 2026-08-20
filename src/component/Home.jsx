@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useSearchParams } from "react-router";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createTask, updateTask } from "../redux/taskSlice ";
 
 const Home = () => {
@@ -10,16 +10,35 @@ const Home = () => {
   const [searchParams, setSearchParams] = useSearchParams("");
   const taskId = searchParams.get("taskId");
   const dispatch = useDispatch();
-  // console.log(title);
-  // console.log(content);
+  const allTasks= useSelector((state)=>state.task.tasks);
+
+  
+
+useEffect(() => {
+  if (!taskId) {
+    setTitle("");
+    setContent("");
+    return;
+  }
+
+  const task = allTasks.find(
+    (item) => String(item._id) === String(taskId)
+  );
+
+  if (task) {
+    setTitle(task.title);
+    setContent(task.content);
+  }
+}, [taskId, allTasks]);
 
   const HandlerSubmit = () => {
     if (!title.trim() || !content.trim()) {
       toast.error("Title and content is required.");
+      return;
     }
 
     const task = {
-      _id:taskId||Date.now(),
+      _id:taskId||Date.now(36),
       title: title.trim(),
       content: content.trim(),
       createdAt: new Date().toISOString(),
@@ -58,7 +77,7 @@ const Home = () => {
           >
             {taskId ? "Update Task" : "Create Task"}
           </button>
-          <Toaster />
+          
         </div>
 
         <textarea

@@ -15,6 +15,11 @@ export const taskSlice = createSlice({
       const task = action.payload;
 
       //add check
+      const exisitngTitle=state.tasks.find((elem)=>elem.title.trim().toLowerCase()=== task.title.toLowerCase())
+      if(exisitngTitle){
+        toast.error("Title with same name already exist!!");
+        return;
+      }
       state.tasks.push(task);
       localStorage.setItem("localTasks", JSON.stringify(state.tasks));
 
@@ -24,34 +29,35 @@ export const taskSlice = createSlice({
       const task = action.payload;
 
       //will return match index
-      const index = state.tasks.findIndex((elem) => elem._id === task._id);
+      const index = state.tasks.findIndex(
+        (elem) => String(elem._id) === String(task._id),
+      );
 
       if (index >= 0) {
         state.tasks[index] = task;
 
-        localStorage.setItem("localTask", JSON.stringify(state.tasks));
+        localStorage.setItem("localTasks", JSON.stringify(state.tasks));
 
         toast.success("Task updated!!");
       }
     },
     viewTask: (state, action) => {},
+
     deleteTask: (state, action) => {
-      const task =action.payload;
+      const taskId = action.payload;
+      console.log(taskId);
+      const index = state.tasks.findIndex((elem) => elem._id === taskId);
 
-      const index=state.tasks.findIndex((elem)=>elem._id === task._id)
-
-      if(index>=0){
-        state.tasks.splice(index,1)
-        localStorage.setItems('localTask',JSON.stringify(state.tasks))
-         toast.success("Task deleted!!");
+      if (index >= 0) {
+        state.tasks.splice(index, 1);
+        localStorage.setItem("localTasks", JSON.stringify(state.tasks));
+        toast.success("Task deleted!!");
       }
-
     },
-    copyTask: (state, action) => {},
 
     resetAllTask: (state) => {
       state.tasks = [];
-      localStorage.setItem("localTask");
+      localStorage.setItem("localTasks");
     },
   },
 });
