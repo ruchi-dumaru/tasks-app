@@ -19,9 +19,9 @@ const Home = () => {
     }
 
     const task = {
+      _id:taskId||Date.now(),
       title: title.trim(),
       content: content.trim(),
-      taskId: taskId || Date.now().toLocaleString(),
       createdAt: new Date().toISOString(),
     };
 
@@ -41,7 +41,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="text-2xl flex-col justify-center items-center ml-50">
+      <div className="text-2xl flex-col justify-center items-center ml-120">
         <div className="mt-10">
           <input
             placeholder="Enter the title"
